@@ -1,0 +1,5 @@
+numpy==1.*
+pytz
+rasterio==1.*
+pyproj==3.*
+click>=7.0

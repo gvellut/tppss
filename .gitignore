@@ -1,0 +1,5 @@
+original
+.vscode
+__pycache__
+**/*.tif
+**/*.tiff
