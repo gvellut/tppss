@@ -1,6 +1,6 @@
 # TPPSS (TopopoSunsun)
 
-Computes sunrise / sunset times taking into account local topography provided by the user as a DEM (it can also simply compute an horizon based on the DEM). Provides a library and a commande line script to compute sunrise / sunset for a location for a single day or a whole year.
+Computes sunrise / sunset times taking into account local topography provided by the user as a DEM (it can also simply compute an horizon based on the DEM). Provides a library and a command line script to compute sunrise / sunset for a location for a single day or a whole year.
 
 # Install
 
