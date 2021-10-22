@@ -45,6 +45,9 @@ Options:
   -t, --timezone TEXT        Timezone for the result [Default: Timezone of the
                              local machine]
 
+  --distance INTEGER         Distance from the position to consider when
+                             computing the horizon (in KM)  [default: 25]
+
   --angle-precision INTEGER  Precision of horizon angles (for each degree)
                              [default: 1]
 
@@ -52,9 +55,6 @@ Options:
   --help                     Show this message and exit.
 ```
 
-The Latitude and Longitude must be in the CRS of the DEM.
-
-The value for the timezone option is something like `Europe/Paris` or `MST`. If not present, it is taken from the local machine. If the timezone has DST, the change is reflected in the times computed for surise and sunset.
 
 ### Example
 
@@ -98,6 +98,9 @@ Options:
                              local machine]
 
   -o, --csv FILE             CSV to export  [required]
+  --distance INTEGER         Distance from the position to consider when
+                             computing the horizon (in KM)  [default: 25]
+
   --angle-precision INTEGER  Precision of horizon angles (for each degree)
                              [default: 1]
 
@@ -137,6 +140,16 @@ DAY,SUNRISE,SUNSET
 Note that the timezone is not recorded inside the file.
 
 If there is no sunset or sunrise, the second and third colums have value `NA`.
+
+## Some notes
+
+The Latitude and Longitude must be in the same CRS as the DEM.
+
+The DEM (Digital Elevation Model) raster must contain heights above the ellipsoid. If the DEM contains instead the altitude above sea level in a gravitational model (for example, EGM96 if SRTM is used), it should first be transformed into heights. However, since only differences of altitudes are considered, it shouldn't matter much depending on the specific purpose (I use this tool for planning photography outings and I am fine with the precision I get).
+
+The value for the timezone option is something like `Europe/Paris` or `MST`. If not present, it is taken from the local machine. If the timezone has DST, the change is reflected in the times computed for surises and sunsets.
+
+The `distance` option indicates how far away from the position should heights be extracted from the DEM when computing the horizon.
 
 # Acknowledgements
 

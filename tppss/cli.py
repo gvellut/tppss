@@ -9,7 +9,7 @@ from colorama import Fore, Style
 from dateutil import tz as dutz
 import rasterio
 
-from . import horizon, sunrise_sunset, sunrise_sunset_year
+from . import horizon, KM, sunrise_sunset, sunrise_sunset_year
 
 colorama.init()
 
@@ -104,6 +104,14 @@ timezone_option = click.option(
     "timezone",
     help="Timezone for the result [Default: Timezone of the local machine]",
 )
+distance_option = click.option(
+    "--distance",
+    "distance",
+    help="Distance from the position to consider when computing the horizon (in KM)",
+    default=25,
+    type=int,
+    show_default=True,
+)
 angle_option = click.option(
     "--angle-precision",
     "angle_precision",
@@ -156,11 +164,12 @@ def main(ctx, is_debug):
     type=click.DateTime(formats=["%Y-%m-%d"]),
 )
 @timezone_option
+@distance_option
 @angle_option
 @time_option
 @click.pass_context
 def tppss_day(
-    ctx, latlon, dem_filepath, day, timezone, angle_precision, time_precision
+    ctx, latlon, dem_filepath, day, timezone, distance, angle_precision, time_precision
 ):
     tz = dutz.gettz(timezone)
     if timezone is None:
@@ -168,7 +177,9 @@ def tppss_day(
         logger.warning(f"Timezone set to local: '{zone_name}'")
     with rasterio.open(dem_filepath) as dataset:
         logger.info("Compute horizon...")
-        horizon_ = horizon(latlon, dataset, height=2, precision=angle_precision)
+        horizon_ = horizon(
+            latlon, dataset, distance=distance * KM, height=2, precision=angle_precision
+        )
 
         logger.info("Compute sunrise / sunset...")
         res = sunrise_sunset(latlon, horizon_, day, tz, precision=time_precision)
@@ -210,6 +221,7 @@ def tppss_day(
     type=click.Path(resolve_path=True, dir_okay=False, writable=True),
     required=True,
 )
+@distance_option
 @angle_option
 @time_option
 @click.pass_context
@@ -220,6 +232,7 @@ def tppss_year(
     year,
     timezone,
     csv_filepath,
+    distance,
     angle_precision,
     time_precision,
 ):
@@ -235,10 +248,14 @@ def tppss_year(
 
     with rasterio.open(dem_filepath) as dataset:
         logger.info("Compute horizon...")
-        horizon_ = horizon(latlon, dataset, height=2, precision=angle_precision)
+        horizon_ = horizon(
+            latlon, dataset, distance=distance * KM, height=2, precision=angle_precision
+        )
 
         logger.info(f"Compute sunrise / sunset for year {year}...")
-        sunsuns = sunrise_sunset_year(latlon, horizon_, year, tz, time_precision)
+        sunsuns = sunrise_sunset_year(
+            latlon, horizon_, year, tz, precision=time_precision
+        )
 
         logger.info(f"Write results to {csv_filepath}...")
         with open(csv_filepath, "w", encoding="utf-8") as f:
