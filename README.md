@@ -39,8 +39,6 @@ John Clark Craig. Python Sun Position for Solar Energy and Research
 
 # TODO 
 
-- Add CLI + CSV export for year
-- Projected DEM
 - Example that draws horizon + sun course through the sky
 - Generate doc
 - Sample: Document how the input DEM is obtained

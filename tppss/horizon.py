@@ -181,7 +181,7 @@ def _extract_data(latlon, raster, distance, ellipsoid):
         topo_lon_distance * 2,
         topo_lat_distance * 2,
     )
-    
+
     window = window.intersection(window_base)
     study_area = raster.read(1, window=window)
     study_transform = raster.window_transform(window)
@@ -197,7 +197,6 @@ def _elevation_angle(
     lon_grid,
     ellipsoid,
 ):
-
     latlon = np.deg2rad(latlon)
     lat_grid = np.deg2rad(lat_grid)
     lon_grid = np.deg2rad(lon_grid)

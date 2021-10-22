@@ -44,11 +44,7 @@ def sunrise_sunset(latlon, horizon, day, tz, precision=1):
 def times_in_day(day, tz, precision=1):
     # 12 am
     base_time = datetime.combine(day, time(0, 0, 0))
-    if hasattr(tz, "localize"):
-        # for pytz
-        base_time = tz.localize(base_time)
-    else:
-        base_time = base_time.replace(tzinfo=tz)
+    base_time = base_time.replace(tzinfo=tz)
 
     # fraction of an hour
     freq = Fraction(1, precision)
@@ -57,8 +53,6 @@ def times_in_day(day, tz, precision=1):
     for i in range(24 * precision + 1):
         step = i * freq
         t = base_time + timedelta(hours=float(step))
-        if hasattr(tz, "normalize"):
-            t = tz.normalize(t)
         times.append(t)
 
     return times

@@ -3,3 +3,4 @@ original
 __pycache__
 **/*.tif
 **/*.tiff
+**/*.csv

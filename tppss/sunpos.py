@@ -1,7 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import math
-
-import pytz
 
 # from
 # https://levelup.gitconnected.com/python-sun-position-for-solar-energy-
@@ -25,7 +23,7 @@ def sunpos(when: datetime, location, refraction=False):
     rlat = rad(latitude)
     rlon = rad(longitude)
     # Decimal hour of the day at Greenwich
-    when_utc = when.astimezone(pytz.utc)
+    when_utc = when.astimezone(timezone.utc)
     dec_utc = when_utc.hour + when_utc.minute / 60 + when_utc.second / 3600
     # Days from J2000, accurate from 1901 to 2099
     daynum = (
