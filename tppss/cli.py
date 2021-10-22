@@ -165,12 +165,12 @@ def tppss_day(
     tz = dutz.gettz(timezone)
     if timezone is None:
         zone_name = datetime.now(tz).tzname()
-        logger.warning(f"Setting timezone to local: '{zone_name}'")
+        logger.warning(f"Timezone set to local: '{zone_name}'")
     with rasterio.open(dem_filepath) as dataset:
-        logger.info("Computing horizon...")
+        logger.info("Compute horizon...")
         horizon_ = horizon(latlon, dataset, height=2, precision=angle_precision)
 
-        logger.info("Computing sunrise / sunset...")
+        logger.info("Compute sunrise / sunset...")
         res = sunrise_sunset(latlon, horizon_, day, tz, precision=time_precision)
 
         sunrise, sunset, is_light_all_day = res
@@ -231,15 +231,16 @@ def tppss_year(
     tz = dutz.gettz(timezone)
     if timezone is None:
         zone_name = datetime.now(tz).tzname()
-        logger.warning(f"Setting timezone to local: '{zone_name}'")
+        logger.warning(f"Timezone set to local: '{zone_name}'")
 
     with rasterio.open(dem_filepath) as dataset:
-        logger.info("Computing horizon...")
+        logger.info("Compute horizon...")
         horizon_ = horizon(latlon, dataset, height=2, precision=angle_precision)
 
-        logger.info(f"Computing sunrise / sunset for year {year}...")
+        logger.info(f"Compute sunrise / sunset for year {year}...")
         sunsuns = sunrise_sunset_year(latlon, horizon_, year, tz, time_precision)
 
+        logger.info(f"Write results to {csv_filepath}...")
         with open(csv_filepath, "w", encoding="utf-8") as f:
             print_output(f, year, sunsuns)
 

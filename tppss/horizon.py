@@ -11,9 +11,6 @@ KM = 1000.0
 MILES = 1609.34
 
 # TODO
-# support projected raster
-# use vertical compensation see
-# https://www.usna.edu/Users/oceano/pguth/md_help/html/demb30q0.htm
 # optional use of rasterio data ; extract proj / ellipsoid from it
 
 # TODO handle nodata (0 dans le TIFF IGN) ;
@@ -24,7 +21,6 @@ MILES = 1609.34
 
 def horizon(latlon, raster, distance=25 * KM, precision=1, height=0):
     if raster.crs.is_projected:
-        # TODO support projected rasters
         raise Exception("Only geographic CRS are supported")
 
     crs = CRS.from_wkt(raster.crs.to_wkt())
