@@ -144,7 +144,7 @@ If there is no sunset or sunrise, the second and third colums have value `NA`.
 
 The Latitude and Longitude must be in the same CRS as the DEM.
 
-The DEM (Digital Elevation Model) raster must contain heights above the ellipsoid. If the DEM contains instead the altitude above the geoid (for example, EGM96 if SRTM is used), it should first be transformed into heights. However, since only differences of altitudes are considered, it shouldn't matter much depending on the specific purpose (I use this tool for planning photography outings and I am fine with the precision I get).
+The DEM (Digital Elevation Model) raster must contain heights above the ellipsoid. If the DEM contains instead the altitude above the geoid (for example, EGM96 if SRTM is used), it should first be transformed into heights. However, since only differences of altitudes are considered, it shouldn't matter much depending on the specific purpose (I use this tool for planning photography outings and I am fine with the precision I get). If needed, the ellipsoidal heights can also be computed using GDAL (`gdalwarp`: See the example at the bottom of [this page](https://gdal.org/programs/gdalwarp.html)).
 
 The value for the timezone option is something like `Europe/Paris` or `MST`. If not present, it is taken from the local machine. If the timezone has DST, the change is reflected in the times computed for surises and sunsets.
 
