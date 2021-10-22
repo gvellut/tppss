@@ -127,17 +127,16 @@ The CSV is as follows:
 
 ```
 DAY,SUNRISE,SUNSET
-2021-01-01,08:48,13:59
-2021-01-02,08:47,13:59
-2021-01-03,08:47,14:01
-2021-01-04,08:46,14:04
-2021-01-05,08:46,14:04
-2021-01-06,08:44,14:05
-2021-01-07,08:44,14:07
+2021-01-01,08:48+0100,13:59+0100
+2021-01-02,08:47+0100,13:59+0100
+2021-01-03,08:47+0100,14:01+0100
+2021-01-04,08:46+0100,14:04+0100
+2021-01-05,08:46+0100,14:04+0100
+2021-01-06,08:44+0100,14:05+0100
 ....
 ```
 
-Note that the timezone is not recorded inside the file.
+The times for sunset and sunrise also indicate the offset from UTC (which can change in the year with DST).
 
 If there is no sunset or sunrise, the second and third colums have value `NA`.
 
@@ -145,11 +144,11 @@ If there is no sunset or sunrise, the second and third colums have value `NA`.
 
 The Latitude and Longitude must be in the same CRS as the DEM.
 
-The DEM (Digital Elevation Model) raster must contain heights above the ellipsoid. If the DEM contains instead the altitude above sea level in a gravitational model (for example, EGM96 if SRTM is used), it should first be transformed into heights. However, since only differences of altitudes are considered, it shouldn't matter much depending on the specific purpose (I use this tool for planning photography outings and I am fine with the precision I get).
+The DEM (Digital Elevation Model) raster must contain heights above the ellipsoid. If the DEM contains instead the altitude above the geoid (for example, EGM96 if SRTM is used), it should first be transformed into heights. However, since only differences of altitudes are considered, it shouldn't matter much depending on the specific purpose (I use this tool for planning photography outings and I am fine with the precision I get).
 
 The value for the timezone option is something like `Europe/Paris` or `MST`. If not present, it is taken from the local machine. If the timezone has DST, the change is reflected in the times computed for surises and sunsets.
 
-The `distance` option indicates how far away from the position should heights be extracted from the DEM when computing the horizon.
+The `--distance` option indicates how far away from the position should heights be extracted from the DEM when computing the horizon.
 
 # Acknowledgements
 
@@ -169,6 +168,7 @@ John Clark Craig. Python Sun Position for Solar Energy and Research
 # TODO 
 
 - Example that draws horizon + sun course through the sky
+- Support projected CRS (use vertical compensation see https://www.usna.edu/Users/oceano/pguth/md_help/html/demb30q0.htm)
 - Generate doc
 - Sample: Document how the input DEM is obtained from the RGE 
-- optional Rasterio dependency; separate CLI dependencies from the library
+- Optional Rasterio dependency; separate CLI dependencies from the library
