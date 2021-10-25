@@ -6,11 +6,9 @@ Computes sunrise / sunset times taking into account local topography provided by
 
 *Not yet on PyPI*
 
-TODO mention rasterio + conda
-
 The tool requires Python 3.7+.
 
-To install, launch :
+To install on Linux, launch :
 
 ```console
 pip install tppss
@@ -18,9 +16,27 @@ pip install tppss
 
 The command above will install the `tppss` Python library and its dependencies. The library includes a command-line script, also named `tppss`, whose functionality is described below.
 
-Library documentation is available [here](http://example.com). (*not yet*)
+## Install on Windows and macOS
+
+Unfortunately, for those platforms , the `rasterIO` library is not available in binary form on PyPI like on Linux. It is recommanded to use Conda to first create an environment then install TPPSS with:
+
+```console
+conda install -c conda-forge rasterio
+pip install tppss
+```
+
+The second command will pick up the `rasterIO` installed by Conda.
+
+# Library documentation
+
+The library documentation is available [here](http://example.com). (*not yet*)
 
 # Instructions
+
+The `tppss` tool has 2 subcommands:
+
+- `day`
+- `year` 
 
 ## Day
 
@@ -171,4 +187,5 @@ John Clark Craig. Python Sun Position for Solar Energy and Research
 - Support projected CRS (use vertical compensation see https://www.usna.edu/Users/oceano/pguth/md_help/html/demb30q0.htm)
 - Generate doc
 - Sample: Document how the input DEM is obtained from the RGE 
-- Optional Rasterio dependency; separate CLI dependencies from the library
+- Optional Rasterio dependency for CLI ; separate CLI dependencies from the library
+- Conda package
