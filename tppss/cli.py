@@ -264,7 +264,7 @@ def tppss_year(
 
 def print_output(file_, year, sunsuns):
     format_day = "%Y-%m-%d"
-    format_sunsun = "%H:%M%z"
+    format_sunsun = "%H:%M:%S%z"
     file_.write("DAY,SUNRISE,SUNSET\n")
     for i in range(len(sunsuns)):
         day, sunrise, sunset, is_light_or_night_all_day = sunsuns[i]
