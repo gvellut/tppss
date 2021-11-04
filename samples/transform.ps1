@@ -15,4 +15,5 @@ gdalbuildvrt "$dataDirPath\mosaic.vrt" -input_file_list "$dataDirPath\$tiffListF
 # To transform a DEM from geoid elevations (using RGF93 / Lambert-93 + NGF-IGN69) to WGS84 ellipsoidal heights
 gdalwarp -of GTiff -co "COMPRESS=LZW" -co "TILED=YES" -overwrite "$dataDirPath\mosaic.vrt" "$outputDirPath\$name.tif"  -s_srs EPSG:5698 -t_srs EPSG:4979
 
-# TODO mosaic 73 + 74 + 38 + 01 (+ geneve)
+#gdal_translate -of GTiff -co "COMPRESS=LZW" -co "TILED=YES" "$dataDirPath\mosaic.vrt" "$outputDirPath\$name.tif"  -a_srs EPSG:5698
+#python C:\Users\gvellut\anaconda3\envs\calcsoleil\Scripts\gdal_merge.py -o dem.tif .\ain.tif .\savoie.tif .\hsav.tif .\isere.tif
