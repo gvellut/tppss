@@ -5,7 +5,7 @@ import logging
 
 import numpy as np
 
-from .sunpos import sunpos
+from .sunpos import sunpos, sunpos_vect
 
 logger = logging.getLogger(__name__)
 
@@ -61,12 +61,7 @@ def times_in_day(day, tz, precision=1):
 def above_horizon(latlon, times, horizon):
     helevations, _, hazimuths = horizon
 
-    azimuths = []
-    elevations = []
-    for i in range(len(times)):
-        azimuth, elevation = sunpos(times[i], latlon)
-        azimuths.append(azimuth)
-        elevations.append(elevation)
+    azimuths, elevations = sunpos_vect(times, latlon)
 
     # take nearest
     centers = (hazimuths[1:] + hazimuths[:-1]) / 2

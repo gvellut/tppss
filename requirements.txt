@@ -4,3 +4,4 @@ rasterio==1.*
 pyproj==3.*
 click>=7.0
 colorama
+numba

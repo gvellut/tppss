@@ -4,3 +4,4 @@ __pycache__
 **/*.tif
 **/*.tiff
 **/*.csv
+test_numba.py
