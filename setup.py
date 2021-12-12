@@ -17,6 +17,9 @@ with open("requirements.txt") as f:
 with open("requirements-dev.txt") as f:
     requirements_dev = f.readlines()
 
+with open("requirements-cli.txt") as f:
+    requirements_cli = f.readlines()
+
 setup_args = dict(
     name="TPPSS",
     version=version,
@@ -43,7 +46,7 @@ setup_args = dict(
     keywords="sunrise dem horizon",
     packages=find_packages(exclude=["docs", "tests"]),
     install_requires=requirements,
-    extras_require={"dev": requirements_dev},
+    extras_require={"dev": requirements_dev, "cli": requirements_cli},
     project_urls={
         "Bug Reports": "https://github.com/gvellut/gpx2exif/issues",
         "Source": "https://github.com/gvellut/gpx2exif",
