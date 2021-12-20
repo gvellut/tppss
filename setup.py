@@ -21,11 +21,9 @@ with open("requirements-cli.txt") as f:
     requirements_cli = f.readlines()
 
 setup_args = dict(
-    name="TPPSS",
+    name="tppss",
     version=version,
-    description=(
-        "Computes sunrise / sunset times taking into account local topography"
-    ),
+    description=("Compute sunrise / sunset times taking into account local topography"),
     long_description=readme,
     long_description_content_type="text/markdown",
     url="https://github.com/gvellut/tppss",
@@ -35,8 +33,7 @@ setup_args = dict(
         "Development Status :: 4 - Beta",
         "Environment :: Console",
         "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: GNU Lesser General Public License v3 or later"
-        " (LGPLv3+)",
+        "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
@@ -48,8 +45,8 @@ setup_args = dict(
     install_requires=requirements,
     extras_require={"dev": requirements_dev, "cli": requirements_cli},
     project_urls={
-        "Bug Reports": "https://github.com/gvellut/gpx2exif/issues",
-        "Source": "https://github.com/gvellut/gpx2exif",
+        "Bug Reports": "https://github.com/gvellut/tppss/issues",
+        "Source": "https://github.com/gvellut/tppss",
     },
     entry_points={"console_scripts": ["tppss=tppss.cli:main"]},
 )

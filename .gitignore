@@ -4,3 +4,6 @@ __pycache__
 **/*.tif
 **/*.tiff
 **/*.csv
+/dist
+/build
+*.egg-info

@@ -1,34 +1,20 @@
 # TPPSS (TopopoSunsun)
 
-Computes sunrise / sunset times taking into account local topography provided by the user as a DEM (it can also simply compute an horizon based on the DEM). Provides a library and a command line script to compute sunrise / sunset for a location for a single day or a whole year.
+TPPSS computes sunrise / sunset times taking into account local topography provided by the user as a DEM (it can also simply compute an horizon based on the DEM). It provides a library and a command line script to compute sunrise / sunset for a location for a single day or a whole year.
 
 # Install
-
-*Not yet on PyPI. In the meantime, install by cloning and using `pip install -e .` inside the cloned directory*
 
 The tool requires Python 3.7+.
 
 ## Library
 
-To install just the library, launch:
+### Linux
+
+To install just the library, on Linux, launch:
 
 ```console
 pip install tppss
 ```
-
-## CLI
-
-The `cli` extra includes a command-line script, also named `tppss`, whose functionality is described below. It has additional dependencies.
-
-### Linux
-
-To install on Linux, launch:
-
-```console
-pip install tppss[cli]
-```
-
-The command above will install the `tppss` Python library as well as the CLI.
 
 ### Windows and macOS
 
@@ -36,10 +22,31 @@ Unfortunately, for those platforms , the `rasterIO` library is not available in 
 
 ```console
 conda install -c conda-forge rasterio
-pip install tppss[cli]
+pip install tppss
 ```
 
 The second command will pick up the `rasterIO` installed by Conda.
+
+## CLI
+
+The `cli` extra includes a command-line script, also named `tppss`, whose functionality is described below. It has a few additional dependencies.
+
+### Linux
+
+Launch:
+
+```console
+pip install tppss[cli]
+```
+
+### Windows and macOS
+
+Launch:
+
+```console
+conda install -c conda-forge rasterio
+pip install tppss[cli]
+```
 
 # Library documentation
 
@@ -168,7 +175,7 @@ DAY,SUNRISE,SUNSET
 
 The times for sunset and sunrise also indicate the offset from UTC (which can change in the year with DST).
 
-If there is no sunset or sunrise, the second and third colums have value `NA`.
+If there is no sunset or sunrise, the second and third columns have value `NA`.
 
 ## Some notes
 
