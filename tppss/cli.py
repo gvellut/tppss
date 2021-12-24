@@ -128,6 +128,15 @@ time_option = click.option(
     type=int,
     show_default=True,
 )
+height_option = click.option(
+    "-h",
+    "--height",
+    "height",
+    help="Height of position in meters",
+    default=2,
+    type=int,
+    show_default=True,
+)
 
 
 @click.group()
@@ -165,11 +174,20 @@ def main(ctx, is_debug):
 )
 @timezone_option
 @distance_option
+@height_option
 @angle_option
 @time_option
 @click.pass_context
 def tppss_day(
-    ctx, latlon, dem_filepath, day, timezone, distance, angle_precision, time_precision
+    ctx,
+    latlon,
+    dem_filepath,
+    day,
+    timezone,
+    distance,
+    height,
+    angle_precision,
+    time_precision,
 ):
     tz = dutz.gettz(timezone)
     if timezone is None:
@@ -178,7 +196,11 @@ def tppss_day(
     with rasterio.open(dem_filepath) as dataset:
         logger.info("Compute horizon...")
         horizon_ = horizon(
-            latlon, dataset, distance=distance * KM, height=2, precision=angle_precision
+            latlon,
+            dataset,
+            distance=distance * KM,
+            height=height,
+            precision=angle_precision,
         )
 
         logger.info("Compute sunrise / sunset...")
@@ -222,6 +244,7 @@ def tppss_day(
     required=True,
 )
 @distance_option
+@height_option
 @angle_option
 @time_option
 @click.pass_context
@@ -233,6 +256,7 @@ def tppss_year(
     timezone,
     csv_filepath,
     distance,
+    height,
     angle_precision,
     time_precision,
 ):
@@ -249,7 +273,11 @@ def tppss_year(
     with rasterio.open(dem_filepath) as dataset:
         logger.info("Compute horizon...")
         horizon_ = horizon(
-            latlon, dataset, distance=distance * KM, height=2, precision=angle_precision
+            latlon,
+            dataset,
+            distance=distance * KM,
+            height=height,
+            precision=angle_precision,
         )
 
         logger.info(f"Compute sunrise / sunset for year {year}...")
