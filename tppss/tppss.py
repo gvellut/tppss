@@ -15,10 +15,13 @@ SunriseSunset = namedtuple(
 
 
 def sunrise_sunset(latlon, horizon, day, tz, precision=1):
-
     times = times_in_day(day, tz, precision)
     above_horizon_indices, _ = above_horizon(latlon, times, horizon)
 
+    return _sunrise_sunset_simple(times, above_horizon_indices)
+
+
+def _sunrise_sunset_simple(times, above_horizon_indices):
     if len(above_horizon_indices) == 0:
         # Night all day
         # TODO test in Norway for example
@@ -30,7 +33,6 @@ def sunrise_sunset(latlon, horizon, day, tz, precision=1):
     # take first for sunrise
     # last for sunset
     # possible that it is hidden again (between peaks):
-    # TODO return all transitions instead of just first ?
     # TODO longest sequence ?
 
     sunrise_time_index = above_horizon_indices[0]
@@ -39,6 +41,42 @@ def sunrise_sunset(latlon, horizon, day, tz, precision=1):
     sunset_time = times[sunset_time_index]
 
     return SunriseSunset(sunrise_time, sunset_time, None)
+
+
+def sunrise_sunset_details(latlon, horizon, day, tz, precision=1):
+    times = times_in_day(day, tz, precision)
+    above_horizon_indices, _ = above_horizon(latlon, times, horizon)
+
+    return _sunrise_sunset_details(times, above_horizon_indices)
+
+
+def _sunrise_sunset_details(times, above_horizon_indices):
+    if len(above_horizon_indices) == 0:
+        # Night all day
+        return SunriseSunset(None, None, False)
+    elif len(above_horizon_indices) == len(times):
+        # Light all day
+        return SunriseSunset(None, None, True)
+
+    # last index before a sunrise (ie sunset)
+    transitions = np.nonzero(above_horizon_indices[1:] - above_horizon_indices[:-1] > 1)
+    transitions = transitions[0]
+
+    # add 1 to transition
+    sunrise_time_indices = 1 + transitions
+    # add first time
+    sunrise_times = [times[above_horizon_indices[0]]]
+    for v in sunrise_time_indices:
+        sunrise_times.append(times[above_horizon_indices[v]])
+
+    sunset_time_indices = transitions
+    sunset_times = []
+    for v in sunset_time_indices:
+        sunset_times.append(times[above_horizon_indices[v]])
+    # add last time
+    sunset_times.append(times[above_horizon_indices[-1]])
+
+    return SunriseSunset(sunrise_times, sunset_times, None)
 
 
 def times_in_day(day, tz, precision=1):
@@ -74,6 +112,7 @@ def above_horizon(latlon, times, horizon):
     # terrain elevation at sun positions for each time step
     helevations_by_time = helevations[indices]
     above_horizon_indices = np.nonzero(elevations - helevations_by_time > 0)
+    # nonzero returns tuple
     above_horizon_indices = above_horizon_indices[0]
 
     return above_horizon_indices, helevations_by_time

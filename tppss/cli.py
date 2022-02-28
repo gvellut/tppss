@@ -9,7 +9,7 @@ from colorama import Fore, Style
 from dateutil import tz as dutz
 import rasterio
 
-from . import horizon, KM, sunrise_sunset, sunrise_sunset_year
+from . import horizon, KM, sunrise_sunset, sunrise_sunset_details, sunrise_sunset_year
 
 colorama.init()
 
@@ -172,6 +172,13 @@ def main(ctx, is_debug):
     required=True,
     type=click.DateTime(formats=["%Y-%m-%d"]),
 )
+@click.option(
+    "-v",
+    "--details",
+    "is_details",
+    is_flag=True,
+    help="Show additional details",
+)
 @timezone_option
 @distance_option
 @height_option
@@ -183,6 +190,7 @@ def tppss_day(
     latlon,
     dem_filepath,
     day,
+    is_details,
     timezone,
     distance,
     height,
@@ -204,18 +212,39 @@ def tppss_day(
         )
 
         logger.info("Compute sunrise / sunset...")
-        res = sunrise_sunset(latlon, horizon_, day, tz, precision=time_precision)
+        if not is_details:
+            res = sunrise_sunset(latlon, horizon_, day, tz, precision=time_precision)
 
-        sunrise, sunset, is_light_all_day = res
-        if is_light_all_day is None:
-            text = f"Sunrise: {sunrise} / Sunset: {sunset}"
-        else:
-            if is_light_all_day:
-                text = "Light all day!"
+            sunrise, sunset, is_light_all_day = res
+            if is_light_all_day is None:
+                text = f"Sunrise: {sunrise} / Sunset: {sunset}"
             else:
-                text = "Night all day!"
+                if is_light_all_day:
+                    text = "Light all day!"
+                else:
+                    text = "Night all day!"
 
-        logger.info(colored(text, Fore.GREEN))
+            logger.info(colored(text, Fore.GREEN))
+        else:
+            res = sunrise_sunset_details(
+                latlon, horizon_, day, tz, precision=time_precision
+            )
+
+            sunrises, sunsets, is_light_all_day = res
+            if is_light_all_day is None:
+                logger.info(colored(f"{len(sunrises)} sunrises", Fore.GREEN))
+                for i in range(len(sunrises)):
+                    sunrise = sunrises[i]
+                    sunset = sunsets[i]
+                    text = f"Sunrise: {sunrise} / Sunset: {sunset}"
+                    logger.info(colored(text, Fore.GREEN))
+            else:
+                if is_light_all_day:
+                    text = "Light all day!"
+                else:
+                    text = "Night all day!"
+                logger.info(colored(text, Fore.GREEN))
+
 
 
 @main.command(
