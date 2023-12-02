@@ -1,2 +1,2 @@
-click==7.*
+click==8.*
 colorama
