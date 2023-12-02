@@ -8,17 +8,15 @@ The tool requires Python 3.7+.
 
 ## Library
 
-### Linux
-
-To install just the library, on Linux, launch:
+To install just the library, launch:
 
 ```console
 pip install tppss
 ```
 
-### Windows and macOS
+### RasterIO
 
-Unfortunately, for those platforms , the `rasterIO` library is not available in binary form on PyPI like on Linux. It is recommanded to use Conda to first create an environment then install TPPSS with:
+Depending on your Python version and platform , the `rasterIO` library may not be available in binary form on PyPI. It is recommanded to use Conda to first create an environment then install TPPSS with:
 
 ```console
 conda install -c conda-forge rasterio
@@ -31,20 +29,9 @@ The second command will pick up the `rasterIO` installed by Conda.
 
 The `cli` extra includes a command-line script, also named `tppss`, whose functionality is described below. It has a few additional dependencies.
 
-### Linux
-
 Launch:
 
 ```console
-pip install tppss[cli]
-```
-
-### Windows and macOS
-
-Launch:
-
-```console
-conda install -c conda-forge rasterio
 pip install tppss[cli]
 ```
 
