@@ -246,7 +246,6 @@ def tppss_day(
                 logger.info(colored(text, Fore.GREEN))
 
 
-
 @main.command(
     "year",
     help="Compute sunset / sunrise time for a whole year",

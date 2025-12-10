@@ -4,7 +4,7 @@ TPPSS computes sunrise / sunset times taking into account local topography provi
 
 # Install
 
-The tool requires Python 3.7+.
+The tool requires Python 3.9+.
 
 ## Library
 

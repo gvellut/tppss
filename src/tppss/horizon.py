@@ -19,7 +19,7 @@ MILES = 1609.34
 # TODO support negative elevation angle
 
 
-def horizon(latlon, raster, distance=25 * KM, precision=1, height=0):
+def horizon(latlon, raster, distance=25 * KM, precision=1, height= 0):
     if raster.crs.is_projected:
         raise Exception("Only geographic CRS are supported")
 
@@ -224,11 +224,11 @@ def _geographic2cartesian(lat, lon, h, ellipsoid):
     # ellipsoid normal
     # TODO optimize for vector case : only 1D (instead of meshgrid) + repeat
     # test if not scalar
-    N = a / np.sqrt(1 - (e ** 2) * (sinlat ** 2))
+    N = a / np.sqrt(1 - (e**2) * (sinlat**2))
 
     x = (N + h) * np.cos(lon) * coslat
     y = (N + h) * np.sin(lon) * coslat
-    z = (N * (1 - e ** 2) + h) * sinlat
+    z = (N * (1 - e**2) + h) * sinlat
 
     return x, y, z
 
@@ -278,8 +278,8 @@ def _dist2deg(latlon, distance, ellipsoid):
     e = _eccentricity(ellipsoid)
     # in meter / radian
     rad_lat = np.deg2rad(lat)
-    dlat = a * (1.0 - e ** 2) / (1.0 - e ** 2 * math.sin(rad_lat) ** 2) ** (3 / 2)
-    dlon = a * math.cos(rad_lat) / math.sqrt(1.0 - e ** 2 * math.sin(rad_lat) ** 2)
+    dlat = a * (1.0 - e**2) / (1.0 - e**2 * math.sin(rad_lat) ** 2) ** (3 / 2)
+    dlon = a * math.cos(rad_lat) / math.sqrt(1.0 - e**2 * math.sin(rad_lat) ** 2)
 
     distance_eps = 0.01
     latMin = 0
@@ -313,7 +313,7 @@ def _dist2deg(latlon, distance, ellipsoid):
 
 def _eccentricity(ellipsoid):
     f = 1 / ellipsoid.inverse_flattening
-    e = math.sqrt(2 * f - f ** 2)
+    e = math.sqrt(2 * f - f**2)
     return e
 
 

@@ -1,4 +1,0 @@
-numpy==1.*
-python-dateutil==2.*
-pyproj==3.*
-rasterio==1.*

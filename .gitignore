@@ -5,5 +5,4 @@ __pycache__
 **/*.tiff
 **/*.csv
 /dist
-/build
-*.egg-info
+.python-version

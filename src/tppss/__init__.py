@@ -1,11 +1,9 @@
-__version__ = "0.2"
+__version__ = "0.3"
 
-
-# flake8: noqa
 
 from .horizon import horizon, KM, MILES
 from .sunpos import sunpos
-from .tppss import (
+from .tppss import (   
     above_horizon,
     sunrise_sunset,
     sunrise_sunset_details,
@@ -13,3 +11,4 @@ from .tppss import (
     SunriseSunset,
     times_in_day,
 )
+ 
