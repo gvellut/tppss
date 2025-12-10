@@ -174,6 +174,55 @@ The value for the timezone option is something like `Europe/Paris` or `MST`. If 
 
 The `--distance` option indicates how far away from the position should heights be extracted from the DEM when computing the horizon.
 
+# Notes
+
+## COG
+
+### Transform base GeoTIFF
+
+#### gdal
+
+```sh
+# -of COG: Use the COG driver (GDAL 3.1+)
+# -co COMPRESS=LZW: Use LZW or DEFLATE compression (DEFLATE is smaller, LZW is faster)
+# -co OVERVIEWS=IGNORE_EXISTING: Recompute fresh overviews
+
+gdal_translate input_dem.tif output_cog.tif \
+    -of COG \
+    -co COMPRESS=LZW \
+    -co OVERVIEWS=IGNORE_EXISTING \
+    -co RESAMPLING=BILINEAR
+```
+
+#### rio-cogeo
+
+For DEM :
+
+```sh
+rio cogeo create input_dem.tif output_dem_cog.tif \
+  --profile deflate \
+  --overview-resampling bilinear
+  ```
+
+For sat iamge use, `--profile webp --web-optimized`.
+
+##### Use with uvx
+
+`uvx --from rasterio --with rio-cogeo rio cogeo ...`
+
+### Validate
+
+#### gdal
+
+`gdalinfo ....tif`
+
+- If it says Driver: GTiff/GeoTIFF, look for Metadata: layout=COG.
+- If the file is hosted remotely (gs://), look for: Band 1 Block=512x512. If you see Block=25000x1 (strip layout), it is not a COG.
+
+#### rio-cogeo 
+
+`rio cogeo validate output_dem_cog.tif`
+
 # Acknowledgements
 
 The horizon computation is based on this Matlab code (adapted for Python + Numpy):
