@@ -66,7 +66,7 @@ def sunpos(when: datetime, location, refraction=False):
     elevation = _into_range(deg(elevation), -180, 180)
     # Refraction correction (optional)
     if refraction:
-        targ = rad((elevation + (10.3 / (elevation + 5.11))))
+        targ = rad(elevation + (10.3 / (elevation + 5.11)))
         elevation += (1.02 / tan(targ)) / 60
     # Return azimuth and elevation in degrees
     return (round(azimuth, 2), round(elevation, 2))

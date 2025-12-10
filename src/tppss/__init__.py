@@ -1,14 +1,13 @@
 __version__ = "0.3"
 
-
-from .horizon import horizon, KM, MILES
+# ruff: noqa
+from .horizon import KM, MILES, horizon
 from .sunpos import sunpos
-from .tppss import (   
+from .tppss import (
+    SunriseSunset,
     above_horizon,
     sunrise_sunset,
     sunrise_sunset_details,
     sunrise_sunset_year,
-    SunriseSunset,
     times_in_day,
 )
- 

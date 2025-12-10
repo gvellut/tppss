@@ -6,7 +6,7 @@ description = "Compute sunrise / sunset times taking into account local topograp
 license = { file = "LICENSE" }
 readme = "README.md"
 authors = [{ name = "Guilhem Vellut", email = "guilhem.vellut@gmail.com" }]
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",

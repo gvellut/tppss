@@ -9,7 +9,7 @@ from colorama import Fore, Style
 from dateutil import tz as dutz
 import rasterio
 
-from . import horizon, KM, sunrise_sunset, sunrise_sunset_details, sunrise_sunset_year
+from . import KM, horizon, sunrise_sunset, sunrise_sunset_details, sunrise_sunset_year
 
 colorama.init()
 
@@ -22,11 +22,7 @@ LOG_COLORS = {logging.ERROR: Fore.RED, logging.WARNING: Fore.YELLOW}
 class ColorFormatter(logging.Formatter):
     def format(self, record, *args, **kwargs):
         if record.levelno in LOG_COLORS:
-            record.msg = "{color_begin}{message}{color_end}".format(
-                message=record.msg,
-                color_begin=LOG_COLORS[record.levelno],
-                color_end=Style.RESET_ALL,
-            )
+            record.msg = f"{LOG_COLORS[record.levelno]}{record.msg}{Style.RESET_ALL}"
         return super().format(record, *args, **kwargs)
 
 
@@ -64,7 +60,7 @@ class CatchAllExceptionsCommand(click.Command):
         try:
             return super().invoke(ctx)
         except Exception as ex:
-            raise UnrecoverableJNCEPError(str(ex), sys.exc_info())
+            raise UnrecoverableJNCEPError(str(ex), sys.exc_info()) from ex
 
 
 class UnrecoverableJNCEPError(click.ClickException):
@@ -188,7 +184,7 @@ def main(ctx, is_debug):
 def tppss_day(
     ctx,
     latlon,
-    dem_filepath,
+    dem_filepath: str,
     day,
     is_details,
     timezone,
@@ -201,6 +197,7 @@ def tppss_day(
     if timezone is None:
         zone_name = datetime.now(tz).tzname()
         logger.warning(f"Timezone set to local: '{zone_name}'")
+
     with rasterio.open(dem_filepath) as dataset:
         logger.info("Compute horizon...")
         horizon_ = horizon(

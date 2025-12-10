@@ -19,7 +19,7 @@ MILES = 1609.34
 # TODO support negative elevation angle
 
 
-def horizon(latlon, raster, distance=25 * KM, precision=1, height= 0):
+def horizon(latlon, raster, distance=25 * KM, precision=1, height=0):
     if raster.crs.is_projected:
         raise Exception("Only geographic CRS are supported")
 
