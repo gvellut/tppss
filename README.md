@@ -240,9 +240,10 @@ John Clark Craig. Python Sun Position for Solar Energy and Research
 
 # TODO 
 
-- Example that draws horizon + sun course through the sky
-- Support projected CRS (use vertical compensation see https://www.usna.edu/Users/oceano/pguth/md_help/html/demb30q0.htm)
-- Generate doc
+- Example that draws horizon + sun course through the sky or just sunrise / sunset position
 - Sample: Document how the input DEM is obtained from the RGE 
-- Optional Rasterio dependency for CLI ; separate CLI dependencies from the library
-- Conda package
+- numba or faster computations
+- correct issue when pos lat/lon near border of DEM cell : if too steep, will seem higher than it should
+- web interface for deployment on Cloud Run
+- Generate doc
+- Support projected CRS (use vertical compensation see https://www.usna.edu/Users/oceano/pguth/md_help/html/demb30q0.htm)
