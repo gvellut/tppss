@@ -23,6 +23,9 @@ dependencies = ["numpy>=2", "python-dateutil>=2", "pyproj>=3", "rasterio>=1"]
 
 [project.optional-dependencies]
 cli = ["click>=8", "colorama"]
+s3 = ["boto3"]
+gcs = ["google-auth"]
+azure = ["azure-storage-blob"]
 
 [project.urls]
 homepage = "https://github.com/gvellut/tppss"

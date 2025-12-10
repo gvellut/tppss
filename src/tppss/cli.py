@@ -1,5 +1,6 @@
 from datetime import datetime
 import logging
+import os
 import sys
 import traceback
 
@@ -8,6 +9,7 @@ import colorama
 from colorama import Fore, Style
 from dateutil import tz as dutz
 import rasterio
+from rasterio.session import AWSSession, AzureSession, GSSession
 
 from . import KM, horizon, sunrise_sunset, sunrise_sunset_details, sunrise_sunset_year
 
@@ -78,6 +80,52 @@ def colored(s, color):
     return f"{color}{s}{Fore.RESET}"
 
 
+class CloudOrPath(click.ParamType):
+    name = "cloud_or_path"
+
+    def convert(self, value, param, ctx):
+        cloud_prefixes = ("gs://", "s3://", "az://", "http://", "https://")
+
+        if value.startswith(cloud_prefixes):
+            return value
+
+        # Replicate click.Path(exists=True) behavior
+        if not os.path.exists(value):
+            self.fail(f"File '{value}' does not exist.", param, ctx)
+
+        # Replicate click.Path(dir_okay=False) behavior
+        if os.path.isdir(value):
+            self.fail(f"Path '{value}' is a directory, not a file.", param, ctx)
+
+        # Replicate click.Path(resolve_path=True) behavior
+        return os.path.abspath(value)
+
+
+def get_env_context(filepath):
+    """Returns the correct Rasterio Env/Session based on the file prefix."""
+
+    # 1. Google Cloud Storage
+    if filepath.startswith("gs://"):
+        return rasterio.Env(session=GSSession())
+
+    # 2. AWS S3
+    elif filepath.startswith("s3://"):
+        return rasterio.Env(session=AWSSession())
+
+    # 3. Azure Blob Storage
+    elif filepath.startswith("az://"):
+        return rasterio.Env(session=AzureSession())
+
+    # 4. HTTP/HTTPS (Public COGs - e.g. OpenAerialMap)
+    elif filepath.startswith("http://") or filepath.startswith("https://"):
+        # Env() ensures GDAL VSI network drivers are active
+        return rasterio.Env()
+
+    # 5. Local Files
+    else:
+        return rasterio.Env()
+
+
 position_option = click.option(
     "-p",
     "-position",
@@ -90,9 +138,9 @@ dem_option = click.option(
     "-m",
     "--dem",
     "dem_filepath",
-    help="DEM in TIFF format and Geographic CRS (eg WGS4)",
+    help="DEM in TIFF format and Geographic CRS (eg WGS4) [local or Cloud URL]",
     required=True,
-    type=click.Path(exists=True, resolve_path=True, dir_okay=False),
+    type=CloudOrPath(),
 )
 timezone_option = click.option(
     "-t",
@@ -198,49 +246,50 @@ def tppss_day(
         zone_name = datetime.now(tz).tzname()
         logger.warning(f"Timezone set to local: '{zone_name}'")
 
-    with rasterio.open(dem_filepath) as dataset:
-        logger.info("Compute horizon...")
-        horizon_ = horizon(
-            latlon,
-            dataset,
-            distance=distance * KM,
-            height=height,
-            precision=angle_precision,
-        )
-
-        logger.info("Compute sunrise / sunset...")
-        if not is_details:
-            res = sunrise_sunset(latlon, horizon_, day, tz, precision=time_precision)
-
-            sunrise, sunset, is_light_all_day = res
-            if is_light_all_day is None:
-                text = f"Sunrise: {sunrise} / Sunset: {sunset}"
-            else:
-                if is_light_all_day:
-                    text = "Light all day!"
-                else:
-                    text = "Night all day!"
-
-            logger.info(colored(text, Fore.GREEN))
-        else:
-            res = sunrise_sunset_details(
-                latlon, horizon_, day, tz, precision=time_precision
+    with get_env_context(dem_filepath):
+        with rasterio.open(dem_filepath) as dataset:
+            logger.info(f"Compute horizon with DEM {dem_filepath}...")
+            horizon_ = horizon(
+                latlon,
+                dataset,
+                distance=distance * KM,
+                height=height,
+                precision=angle_precision,
             )
 
-            sunrises, sunsets, is_light_all_day = res
-            if is_light_all_day is None:
-                logger.info(colored(f"{len(sunrises)} sunrises", Fore.GREEN))
-                for i in range(len(sunrises)):
-                    sunrise = sunrises[i]
-                    sunset = sunsets[i]
-                    text = f"Sunrise: {sunrise} / Sunset: {sunset}"
-                    logger.info(colored(text, Fore.GREEN))
+    logger.info("Compute sunrise / sunset...")
+    if not is_details:
+        res = sunrise_sunset(latlon, horizon_, day, tz, precision=time_precision)
+
+        sunrise, sunset, is_light_all_day = res
+        if is_light_all_day is None:
+            text = f"Sunrise: {sunrise} / Sunset: {sunset}"
+        else:
+            if is_light_all_day:
+                text = "Light all day!"
             else:
-                if is_light_all_day:
-                    text = "Light all day!"
-                else:
-                    text = "Night all day!"
+                text = "Night all day!"
+
+        logger.info(colored(text, Fore.GREEN))
+    else:
+        res = sunrise_sunset_details(
+            latlon, horizon_, day, tz, precision=time_precision
+        )
+
+        sunrises, sunsets, is_light_all_day = res
+        if is_light_all_day is None:
+            logger.info(colored(f"{len(sunrises)} sunrises", Fore.GREEN))
+            for i in range(len(sunrises)):
+                sunrise = sunrises[i]
+                sunset = sunsets[i]
+                text = f"Sunrise: {sunrise} / Sunset: {sunset}"
                 logger.info(colored(text, Fore.GREEN))
+        else:
+            if is_light_all_day:
+                text = "Light all day!"
+            else:
+                text = "Night all day!"
+            logger.info(colored(text, Fore.GREEN))
 
 
 @main.command(
