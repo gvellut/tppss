@@ -19,7 +19,13 @@ classifiers = [
     "Topic :: Scientific/Engineering :: GIS",
 ]
 keywords = ["sunrise", "dem", "horizon"]
-dependencies = ["numpy>=2", "python-dateutil>=2", "pyproj>=3", "rasterio>=1"]
+dependencies = [
+    "numpy>=2",
+    "python-dateutil>=2",
+    "pyproj>=3",
+    "rasterio>=1",
+    "matplotlib>=3.10.8",
+]
 
 [project.optional-dependencies]
 cli = ["click>=8", "colorama"]
