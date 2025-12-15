@@ -195,6 +195,5 @@ John Clark Craig. Python Sun Position for Solar Energy and Research
 - Sample: Document how the input DEM is obtained from the RGE 
 - numba or faster computations
 - correct issue when pos lat/lon near border of DEM cell : if too steep, will seem higher than it should
-- web interface for deployment on Cloud Run
 - Generate doc
 - Support projected CRS (use vertical compensation see https://www.usna.edu/Users/oceano/pguth/md_help/html/demb30q0.htm)
