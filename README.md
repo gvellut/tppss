@@ -4,7 +4,7 @@ TPPSS computes sunrise / sunset times taking into account local topography provi
 
 # Install
 
-The tool requires Python 3.9+.
+The tool requires Python 3.10+.
 
 ## Library
 
@@ -16,7 +16,7 @@ pip install tppss
 
 ### RasterIO
 
-Depending on your Python version and platform , the `rasterIO` library may not be available in binary form on PyPI. It is recommanded to use Conda to first create an environment then install TPPSS with:
+Depending on your Python version and platform , the `rasterIO` library may not be available in binary form on PyPI. In that case, it is recommanded to use Conda to first create an environment then install TPPSS with:
 
 ```console
 conda install -c conda-forge rasterio
