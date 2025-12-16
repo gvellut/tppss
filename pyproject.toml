@@ -26,6 +26,7 @@ cli = ["click>=8", "colorama"]
 s3 = ["boto3"]
 gcs = ["google-auth"]
 azure = ["azure-storage-blob"]
+numba = ["numba"]
 
 [project.urls]
 homepage = "https://github.com/gvellut/tppss"
