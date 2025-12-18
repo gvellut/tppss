@@ -62,10 +62,10 @@ class CatchAllExceptionsCommand(click.Command):
         try:
             return super().invoke(ctx)
         except Exception as ex:
-            raise UnrecoverableJNCEPError(str(ex), sys.exc_info()) from ex
+            raise UnrecoverableTPPSSError(str(ex), sys.exc_info()) from ex
 
 
-class UnrecoverableJNCEPError(click.ClickException):
+class UnrecoverableTPPSSError(click.ClickException):
     def __init__(self, message, exc_info):
         super().__init__(message)
         self.exc_info = exc_info
