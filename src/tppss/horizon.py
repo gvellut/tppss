@@ -35,8 +35,9 @@ def horizon(latlon, raster, distance=25 * KM, precision=1, height=0):
 
     logger.debug("Computing azimuths...")
     # Azimuth of all pixel corners seen from observer point
-    # bottom right corners
     lat_res, lon_res = _resolution(study_transform)
+    # lats - lat_res / 2, lons + lon_res / 2 => lats lons are centers, so corresponds
+    # to bottom right corners
     azimuth = _azimuth(latlon, lats - lat_res / 2, lons + lon_res / 2, ellipsoid)
 
     # Corresponding elevation angle
@@ -60,6 +61,8 @@ def horizon(latlon, raster, distance=25 * KM, precision=1, height=0):
     # Finalization
     # Set horizon
     # TODO negative values should be allowed (when located at peak of mountain)
+    # although possibly it would not make much of a difference: just earth curvature
+    # withouth relief
     helevation[helevation < 0] = 0
     hzenith = 90 - helevation
     # Store azimuth from 0 to 360 (for using with solar azimuth functions)

@@ -6,7 +6,7 @@ import traceback
 
 import click
 import colorama
-from colorama import Fore, Style
+from colorama import Fore
 from dateutil import tz as dutz
 import rasterio
 from rasterio.session import AWSSession, AzureSession, GSSession
@@ -24,7 +24,7 @@ LOG_COLORS = {logging.ERROR: Fore.RED, logging.WARNING: Fore.YELLOW}
 class ColorFormatter(logging.Formatter):
     def format(self, record, *args, **kwargs):
         if record.levelno in LOG_COLORS:
-            record.msg = f"{LOG_COLORS[record.levelno]}{record.msg}{Style.RESET_ALL}"
+            record.msg = f"{LOG_COLORS[record.levelno]}{record.msg}{Fore.RESET}"
         return super().format(record, *args, **kwargs)
 
 
@@ -74,10 +74,6 @@ class UnrecoverableJNCEPError(click.ClickException):
         logger.error("*** An unrecoverable error occured ***")
         logger.error(self.message)
         logger.debug("".join(traceback.format_exception(*self.exc_info)))
-
-
-def colored(s, color):
-    return f"{color}{s}{Fore.RESET}"
 
 
 class CloudOrPath(click.ParamType):
@@ -270,7 +266,7 @@ def tppss_day(
             else:
                 text = "Night all day!"
 
-        logger.info(colored(text, Fore.GREEN))
+        logger.info(text)
     else:
         res = sunrise_sunset_details(
             latlon, horizon_, day, tz, precision=time_precision
@@ -278,18 +274,18 @@ def tppss_day(
 
         sunrises, sunsets, is_light_all_day = res
         if is_light_all_day is None:
-            logger.info(colored(f"{len(sunrises)} sunrises", Fore.GREEN))
+            logger.info(f"{len(sunrises)} sunrises")
             for i in range(len(sunrises)):
                 sunrise = sunrises[i]
                 sunset = sunsets[i]
                 text = f"Sunrise: {sunrise} / Sunset: {sunset}"
-                logger.info(colored(text, Fore.GREEN))
+                logger.info(text)
         else:
             if is_light_all_day:
                 text = "Light all day!"
             else:
                 text = "Night all day!"
-            logger.info(colored(text, Fore.GREEN))
+            logger.info(text)
 
 
 @main.command(
