@@ -1,7 +1,7 @@
 __version__ = "0.3"
 
 # ruff: noqa
-from .horizon import KM, MILES, horizon
+from .horizon import KM, MILES, horizon, DEMCoverageError, NonGeographicCRSError
 from .sunpos import sunpos
 from .tppss import (
     SunriseSunset,
