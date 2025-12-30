@@ -7,6 +7,15 @@ import rasterio
 
 logger = logging.getLogger(__name__)
 
+
+class DEMCoverageError(Exception):
+    pass
+
+
+class NonGeographicCRSError(Exception):
+    pass
+
+
 KM = 1000.0
 MILES = 1609.34
 
@@ -21,7 +30,7 @@ MILES = 1609.34
 
 def horizon(latlon, raster, distance=25 * KM, precision=1, height=0):
     if raster.crs.is_projected:
-        raise Exception("Only geographic CRS are supported")
+        raise NonGeographicCRSError("Only geographic CRS are supported")
 
     crs = CRS.from_wkt(raster.crs.to_wkt())
     ellipsoid = crs.ellipsoid
@@ -163,8 +172,11 @@ def _extract_data(latlon, raster, distance, ellipsoid):
     row, col = raster.index(lon, lat)
 
     if not 0 <= row < raster.height or not 0 <= col < raster.width:
-        # TODO specific exception
-        raise Exception("LatLon not covered by DEM")
+        raise DEMCoverageError(
+            f"Coordinates ({lat}, {lon}) are not covered by the DEM. "
+            f"DEM bounds: rows [0, {raster.height}), cols [0, {raster.width}), "
+            f"requested: row={row}, col={col}"
+        )
 
     # deg corresponding to distance
 
