@@ -189,6 +189,12 @@ John Clark Craig. Python Sun Position for Solar Energy and Research
 (https://levelup.gitconnected.com/python-sun-position-for-solar-energy-and-research-7a4ead801777)
 
 
+# Development
+
+The project uses uv for dependency management.
+
+Install the deps with `uv sync --extra gcs --extra numba --extra cli` (or just `cli` for local access).
+
 # TODO 
 
 - Example that draws horizon + sun course through the sky or just sunrise / sunset position

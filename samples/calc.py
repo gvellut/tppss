@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 import logging
 
 from dateutil import tz as dutz
@@ -15,7 +15,7 @@ logger = logging.getLogger(__package__)
 latlon = (46.179317, 6.234106)
 # imperial (45.903562, 6.144632)  # (45.903627, 6.144714)
 # tz = dutz.gettz("Europe/Paris")
-tz = dutz.gettz()
+tz = datetime.now().astimezone().tzinfo
 
 day = date(2021, 11, 1)
 with rasterio.open(

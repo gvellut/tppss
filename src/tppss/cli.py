@@ -3,11 +3,11 @@ import logging
 import os
 import sys
 import traceback
+from zoneinfo import ZoneInfo
 
 import click
 import colorama
 from colorama import Fore
-from dateutil import tz as dutz
 import rasterio
 from rasterio.session import AWSSession, AzureSession, GSSession
 
@@ -237,10 +237,7 @@ def tppss_day(
     angle_precision,
     time_precision,
 ):
-    tz = dutz.gettz(timezone)
-    if timezone is None:
-        zone_name = datetime.now(tz).tzname()
-        logger.warning(f"Timezone set to local: '{zone_name}'")
+    tz = get_tz_info(timezone)
 
     with get_env_context(dem_filepath):
         with rasterio.open(dem_filepath) as dataset:
@@ -335,10 +332,7 @@ def tppss_year(
             "Sun position computation may not be accurate outside years 1901 to 2099!"
         )
 
-    tz = dutz.gettz(timezone)
-    if timezone is None:
-        zone_name = datetime.now(tz).tzname()
-        logger.warning(f"Timezone set to local: '{zone_name}'")
+    tz = get_tz_info(timezone)
 
     with rasterio.open(dem_filepath) as dataset:
         logger.info("Compute horizon...")
@@ -374,6 +368,19 @@ def print_output(file_, year, sunsuns):
             )
         else:
             file_.write(f"{day.strftime(format_day)},NA,NA\n")
+
+
+def get_tz_info(timezone_str: str | None):
+    if timezone_str:
+        # User provided a string (e.g., "America/New_York")
+        tz = ZoneInfo(timezone_str)
+    else:
+        # Get the local system timezone object
+        # .astimezone() with no args returns a datetime in the local zone
+        tz = datetime.now().astimezone().tzinfo
+        logger.warning(f"Timezone set to local: '{tz.tzname(None)}'")
+
+    return tz
 
 
 if __name__ == "__main__":
